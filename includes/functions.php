@@ -37,7 +37,7 @@ function route($path,$params=null,$signValue=null){
 	
 	
 	
-	return siteurl().'/'.$path.$queryString;
+	return siteurl().$path.$queryString;
 }
 
 function redirectRoute($path,$params = null){
@@ -47,8 +47,8 @@ function redirectRoute($path,$params = null){
 	}else{
 		$queryString = '';
 	}
-	
-	header("Location: ".siteurl().'/'.$path.$queryString);
+	header("Location: ".siteurl().$path.$queryString);
+	die();
 }
 
 function verifySignature($value){
@@ -137,3 +137,96 @@ function magicInsert($tablename,$data){
 		else
 			return false; 
 }
+
+
+function extractString($string, $start, $end)
+{
+	$pos = stripos($string, $start);
+
+	$str = substr($string, $pos);
+
+	$str_two = substr($str, strlen($start));
+
+	$second_pos = stripos($str_two, $end);
+
+	$str_three = substr($str_two, 0, $second_pos);
+
+	$unit = trim($str_three); // remove whitespaces
+
+	return $unit;
+}
+
+function match_route($r,$_routes){
+	
+	//echo "request - ".$r;
+	$flag = 0;
+	$params = [];
+
+	foreach($_routes as $route => $controller){
+		
+		$flag = 0;
+
+		if(strtolower($r) == $route){
+			return array('route' => $controller, 'params' => []);
+		}
+
+		if(substr_count($route,'/') == substr_count($r,'/')){
+
+			
+			$data = explode('/',$r);
+			$count = substr_count($route,'/');
+
+			$data2 = explode('/',$route);
+
+			
+			
+			for($i=0; $i <= $count;$i++){
+				if(strpos($data2[$i],'{') === false){
+				
+					if ($data2[$i] != $data[$i]) {
+						$flag = 1;
+						break;
+					}
+
+				}else{
+
+
+					$key = extractString($data2[$i],'{','}');
+					//echo $key.' - '.$data[$i];
+
+					$params[$key] = $data[$i];
+				}
+
+				
+			}
+
+			if($flag == 1){
+				continue;
+			}
+
+			
+
+
+			/*
+			$params = $data;
+
+			//print_r($params);
+
+			$i=0;
+			while($i < $count){
+
+				unset($params[$i]);
+				$i++;
+			}
+
+			$params = array_slice($params,$i-1);
+			*/
+
+
+
+			return array('route' => $controller, 'params' => $params);
+		}
+	}
+}
+
+require_once('user_functions.php');
