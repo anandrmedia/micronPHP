@@ -15,6 +15,10 @@ Write your controllers inside app/controllers folder, and write the view inside 
 
 When you visit, http://yourmicronsiteurl/pagename , the controller named pagename.php and view named pagename.php will be executed.
 
+Also, you can create virtual routes, that can point to a controller or view.
+
+Routes are defined in includes/routes.php file.
+
 ## Helper Functions
 
 ### Link Builder
