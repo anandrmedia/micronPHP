@@ -12,6 +12,9 @@ function siteurl(){
 	$path = ltrim($path,DIRECTORY_SEPARATOR);
 	$url = "http://$siteUrl/{$path}";
 	
+	if(substr($url, -1) !== '/' )
+		$url.='/';
+	
 	//$url = rtrim($url,'/');
 	return $url;
 }
