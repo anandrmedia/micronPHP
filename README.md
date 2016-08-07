@@ -1,6 +1,8 @@
 # micronPHP
 A simple lightweight framework for building apps and APIs in PHP
 
+Checkout the wiki for detailed instructions.
+
 ## Folder Structure
 /
 - app -> controllers , views
